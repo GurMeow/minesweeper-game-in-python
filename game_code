@@ -1,0 +1,147 @@
+import random
+
+MAX_BOARD = 25
+
+def create_board(y, x):
+    board = []
+    for i in range(y):
+        board.append([])
+        for j in range(x):
+            board[i].append('-')
+    return board
+
+
+def print_board(board):
+    for i in range(len(board)):
+        for j in range(len(board[i])):
+            print(board[i][j], end=" ")
+        print()
+
+
+def get_coordinates_and_chance():
+    counter = 0
+    
+    while True:
+        
+        if counter==3:
+            return "stop"
+        
+        try:
+            y_coordinate = int(input(f"please enter the row amount in range of 1 to {MAX_BOARD}: "))
+            x_coordinate = int(input(f"please enter the column amount in range of 1 to {MAX_BOARD}: "))
+            bomb_chance = int(input(f"please enter the chance for a bomb to apear in range of 2 to 20: "))
+            
+            if y_coordinate < 1 or y_coordinate > MAX_BOARD or x_coordinate < 1 or x_coordinate > MAX_BOARD or bomb_chance < 2 or bomb_chance > 20:
+                print("you did not enter the asked range for the coordinates or for the chance")
+            else:
+                return y_coordinate, x_coordinate, bomb_chance
+        except:
+            counter+=1
+            print("please enter valid places and chance")
+
+
+def binary_stage_board_make(board, bomb_chance):
+    for i in range(len(board)):
+        for j in range(len(board[i])):
+            board[i][j] = random.randint(1, bomb_chance)
+    return board
+
+
+def bombs_check(board, i, j):
+    counter = 0
+    
+    try:
+        if board[i-1][j-1]=='X':
+            counter+=1
+    except:
+        pass
+    
+    try:
+        if board[i-1][j]=='X':
+            counter+=1
+    except:
+        pass
+    
+    try:
+        if board[i-1][j+1]=='X':
+            counter+=1
+    except:
+        pass
+    
+    try:
+        if board[i][j-1]=='X':
+            counter+=1
+    except:
+        pass
+    
+    try:
+        if board[i][j]=='X':
+            counter+=1
+    except:
+        pass
+    
+    try:
+        if board[i][j+1]=='X':
+            counter+=1
+    except:
+        pass
+    
+    try:
+        if board[i-+1][j-1]=='X':
+            counter+=1
+    except:
+        pass
+    
+    try:
+        if board[i+1][j]=='X':
+            counter+=1
+    except:
+        pass
+    
+    try:
+        if board[i+1][j+1]=='X':
+            counter+=1
+    except:
+        pass
+    
+    
+    return counter
+
+
+def bombs_and_numb_stage_make(board):
+    for i in range(len(board)):
+        for j in range(len(board[i])):
+            if board[i][j]==1:
+                board[i][j] = 'X'
+            else:
+                board[i][j] = bombs_check(board, i, j)
+    
+    return board
+
+
+def all_stages(board, bomb_chance):
+    board = binary_stage_board_make(board, bomb_chance)
+    board = bombs_and_numb_stage_make(board)
+    
+    return board
+
+
+def main():
+    coordinates = get_coordinates_and_chance()
+    
+    if coordinates!="stop":
+        y_coordinate, x_coordinate, bomb_chance = coordinates
+    else:
+        print("you have entered 3 times invalid coordinates, game will now end")
+        return "gameover"
+    
+    main_board = create_board(y_coordinate, x_coordinate)
+    
+    main_board = all_stages(main_board, bomb_chance)
+    
+    print_board(main_board)
+
+# print_board(main_board)
+
+
+main()

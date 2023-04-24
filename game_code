@@ -50,65 +50,47 @@ def binary_stage_board_make(board, bomb_chance):
 def bombs_check(board, i, j):
     counter = 0
     
-    try:
+    if i-1>=0 and i-1<len(board) and j-1>=0 and j-1<len(board[i]):
         if board[i-1][j-1]=='X':
             counter+=1
-    except:
-        pass
     
-    try:
+    if i-1>=0 and i-1<len(board) and j>=0 and j<len(board[i]):
         if board[i-1][j]=='X':
             counter+=1
-    except:
-        pass
     
-    try:
+    if i-1>=0 and i-1<len(board) and j+1>=0 and j+1<len(board[i]):
         if board[i-1][j+1]=='X':
             counter+=1
-    except:
-        pass
     
-    try:
+    if i>=0 and i<len(board) and j-1>=0 and j-1<len(board[i]):
         if board[i][j-1]=='X':
             counter+=1
-    except:
-        pass
     
-    try:
+    if i>=0 and i<len(board) and j>=0 and j<len(board[i]):
         if board[i][j]=='X':
             counter+=1
-    except:
-        pass
     
-    try:
+    if i>=0 and i<len(board) and j+1>=0 and j+1<len(board[i]):
         if board[i][j+1]=='X':
             counter+=1
-    except:
-        pass
     
-    try:
-        if board[i-+1][j-1]=='X':
+    if i+1>=0 and i+1<len(board) and j-1>=0 and j-1<len(board[i]):
+        if board[i+1][j-1]=='X':
             counter+=1
-    except:
-        pass
     
-    try:
+    if i+1>=0 and i+1<len(board) and j>=0 and j<len(board[i]):
         if board[i+1][j]=='X':
             counter+=1
-    except:
-        pass
     
-    try:
+    if i+1>=0 and i+1<len(board) and j+1>=0 and j+1<len(board[i]):
         if board[i+1][j+1]=='X':
             counter+=1
-    except:
-        pass
     
     
     return counter
 
 
-def bombs_and_numb_stage_make(board):
+def bombs_and_num_stage_make(board):
     for i in range(len(board)):
         for j in range(len(board[i])):
             if board[i][j]==1:
@@ -121,7 +103,7 @@ def bombs_and_numb_stage_make(board):
 
 def all_stages(board, bomb_chance):
     board = binary_stage_board_make(board, bomb_chance)
-    board = bombs_and_numb_stage_make(board)
+    board = bombs_and_num_stage_make(board)
     
     return board
 

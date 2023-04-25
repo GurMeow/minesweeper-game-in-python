@@ -92,10 +92,13 @@ def bombs_check(board, i, j):
 
 def bombs_and_num_stage_make(board):
     for i in range(len(board)):
-        for j in range(len(board[i])):
+        for j in range(len(board[0])):
             if board[i][j]==1:
                 board[i][j] = 'X'
-            else:
+    
+    for i in range(len(board)):
+        for j in range(len(board[0])):
+            if board[i][j]!='X':
                 board[i][j] = bombs_check(board, i, j)
     
     return board

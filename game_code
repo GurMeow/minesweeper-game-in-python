@@ -207,7 +207,6 @@ def game_start():
                 first_action = True
         else:
             if user_board[y_user_input][x_user_input]!='?' and user_board[y_user_input][x_user_input]!='L':
-                print(user_board[y_user_input][x_user_input])
                 print("already taken")
             elif placed_flags[y_user_input][x_user_input]==False:
                 user_board[y_user_input][x_user_input] = 'L'

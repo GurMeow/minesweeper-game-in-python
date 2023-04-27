@@ -112,7 +112,7 @@ def all_stages(board, bomb_chance):
     return board
 
 
-def create_pc_board():
+def valid_coordinates():
     coordinates = get_coordinates_and_chance()
     
     if coordinates!="stop":
@@ -121,6 +121,10 @@ def create_pc_board():
         print("you have entered 3 times invalid coordinates, game will now end")
         return "gameover"
     
+    return y, x, bomb_chance
+
+
+def create_pc_board(y, x, bomb_chance):
     while True:
         eight_amount = 0
         
@@ -133,9 +137,10 @@ def create_pc_board():
                 if main_board[i][j]==8:
                     eight_amount+=1
         
-        if eight_amount
+        if eight_amount == 0:
+            break
         
-    return main_board, y, x
+    return main_board
 
 
 def game_start():
@@ -143,9 +148,10 @@ def game_start():
     zero_checker_bool = []
     first_action = False
     placed_flags = []
-    pc_board, y, x = create_pc_board()
+    y, x, bomb_chance = valid_coordinates()
+    pc_board = create_pc_board(y, x, bomb_chance)
     
-    print_board(pc_board)
+    # print_board(pc_board)
     
     user_board = []
     for i in range(y):
@@ -188,6 +194,12 @@ def game_start():
                 print_board(user_board)
                 print("game over")
                 return
+            elif pc_board[y_user_input][x_user_input]=='X' and not first_action:
+                while True:
+                    pc_board = create_pc_board(y, x, bomb_chance)
+                    if pc_board[y_user_input][x_user_input]!='X':
+                        user_board[y_user_input][x_user_input] = pc_board[y_user_input][x_user_input]
+                        break
             elif user_board[y_user_input][x_user_input]!='?':
                 print("please enter an unknown position")
             else:

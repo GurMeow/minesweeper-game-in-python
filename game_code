@@ -1,4 +1,5 @@
 import random
+import copy
 
 MAX_BOARD = 25
 
@@ -115,29 +116,46 @@ def create_pc_board():
     coordinates = get_coordinates_and_chance()
     
     if coordinates!="stop":
-        y_coordinate, x_coordinate, bomb_chance = coordinates
+        y, x, bomb_chance = coordinates
     else:
         print("you have entered 3 times invalid coordinates, game will now end")
         return "gameover"
     
-    main_board = create_board(y_coordinate, x_coordinate)
-    
-    main_board = all_stages(main_board, bomb_chance)
-    
-    return main_board, y_coordinate, x_coordinate
+    while True:
+        eight_amount = 0
+        
+        main_board = create_board(y, x)
+        
+        main_board = all_stages(main_board, bomb_chance)
+        
+        for i in range(y):
+            for j in range(x):
+                if main_board[i][j]==8:
+                    eight_amount+=1
+        
+        if eight_amount
+        
+    return main_board, y, x
 
 
 def game_start():
+    
+    zero_checker_bool = []
     first_action = False
     placed_flags = []
     pc_board, y, x = create_pc_board()
+    
+    print_board(pc_board)
+    
     user_board = []
     for i in range(y):
         user_board.append([])
         placed_flags.append([])
+        zero_checker_bool.append([])
         for j in range(x):
             user_board[i].append('?')
             placed_flags[i].append(False)
+            zero_checker_bool[i].append(False)
     
     while True:
         print_board(user_board)
@@ -167,13 +185,17 @@ def game_start():
                 print("cant show numbers on flags, disable flag first")
             elif pc_board[y_user_input][x_user_input]=='X' and first_action:
                 user_board[y_user_input][x_user_input] = "!"
+                print_board(user_board)
                 print("game over")
                 return
+            elif user_board[y_user_input][x_user_input]!='?':
+                print("please enter an unknown position")
             else:
                 user_board[y_user_input][x_user_input] = pc_board[y_user_input][x_user_input]
                 first_action = True
         else:
-            if user_board[y_user_input][x_user_input]!='?' or user_board[y_user_input][x_user_input]!='L':
+            if user_board[y_user_input][x_user_input]!='?' and user_board[y_user_input][x_user_input]!='L':
+                print(user_board[y_user_input][x_user_input])
                 print("already taken")
             elif placed_flags[y_user_input][x_user_input]==False:
                 user_board[y_user_input][x_user_input] = 'L'
@@ -183,11 +205,63 @@ def game_start():
                 user_board[y_user_input][x_user_input] = '?'
                 placed_flags[y_user_input][x_user_input] = False
                 first_action = True
+        
+        while True:
+            counter_of_actions = 0
+            for i in range(y):
+                for j in range(x):
+                    if user_board[i][j]==0:
+                        if not zero_checker_bool[i][j]:
+                            
+                            if i-1>=0 and i-1<y and j-1>=0 and j-1<x:
+                                user_board[i-1][j-1] = pc_board[i-1][j-1]
+                            
+                            if i-1>=0 and i-1<y and j>=0 and j<x:
+                                user_board[i-1][j] = pc_board[i-1][j]
+                            
+                            if i-1>=0 and i-1<y and j+1>=0 and j+1<x:
+                                user_board[i-1][j+1] = pc_board[i-1][j+1]
+                            
+                            if i>=0 and i<y and j-1>=0 and j-1<x:
+                                user_board[i][j-1] = pc_board[i][j-1]
+                            
+                            if i>=0 and i<y and j>=0 and j<x:
+                                user_board[i][j] = pc_board[i][j]
+                            
+                            if i>=0 and i<y and j+1>=0 and j+1<x:
+                                user_board[i][j+1] = pc_board[i][j+1]
+                            
+                            if i+1>=0 and i+1<y and j-1>=0 and j-1<x:
+                                user_board[i+1][j-1] = pc_board[i+1][j-1]
+                            
+                            if i+1>=0 and i+1<y and j>=0 and j<x:
+                                user_board[i+1][j] = pc_board[i+1][j]
+                            
+                            if i+1>=0 and i+1<y and j+1>=0 and j+1<x:
+                                user_board[i+1][j+1] = pc_board[i+1][j+1]
+                            
+                            zero_checker_bool[i][j] = True
+                            counter_of_actions+=1
+            if counter_of_actions == 0:
+                break
+        
+        user_board_cpy = copy.deepcopy(user_board)
+        for i in range(y):
+            for j in range(x):
+                if pc_board[i][j]=='X':
+                    user_board_cpy[i][j] = 'X'
+        
+        if user_board_cpy==pc_board:
+            print("you won")
+            print_board(user_board_cpy)
+            return
 
 
 # user_board[y_user_input][x_user_input]
 # placed_flags[y_user_input][x_user_input]
 # pc_board[y_user_input][x_user_input]
+# [i][j]
+# [y][x]
 
 
 def main():

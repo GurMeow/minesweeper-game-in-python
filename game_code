@@ -111,7 +111,7 @@ def all_stages(board, bomb_chance):
     return board
 
 
-def main():
+def create_pc_board():
     coordinates = get_coordinates_and_chance()
     
     if coordinates!="stop":
@@ -124,9 +124,74 @@ def main():
     
     main_board = all_stages(main_board, bomb_chance)
     
-    print_board(main_board)
+    return main_board, y_coordinate, x_coordinate
 
-# print_board(main_board)
+
+def game_start():
+    first_action = False
+    placed_flags = []
+    pc_board, y, x = create_pc_board()
+    user_board = []
+    for i in range(y):
+        user_board.append([])
+        placed_flags.append([])
+        for j in range(x):
+            user_board[i].append('?')
+            placed_flags[i].append(False)
+    
+    while True:
+        print_board(user_board)
+        while True:
+            stop = True
+            try:
+                y_user_input = int(input(f"please enter the y coordinate(1-{y}): "))
+                x_user_input = int(input(f"please enter the x coordinate(1-{x}): "))
+                if y_user_input<1 or y_user_input > y or x_user_input<1 or x_user_input > x:
+                    print('enter valid position')
+                    stop = False
+            except:
+                print("please enter numbers")
+                stop = False
+            if stop:
+                break
+        y_user_input-=1
+        x_user_input-=1
+        while True:
+            action_mode = input("choose mode flag or bomb: ")
+            if action_mode=='flag' or action_mode=='bomb':
+                break
+            print("enter flag or bomb")
+        
+        if action_mode == "bomb":
+            if user_board[y_user_input][x_user_input]=='L':
+                print("cant show numbers on flags, disable flag first")
+            elif pc_board[y_user_input][x_user_input]=='X' and first_action:
+                user_board[y_user_input][x_user_input] = "!"
+                print("game over")
+                return
+            else:
+                user_board[y_user_input][x_user_input] = pc_board[y_user_input][x_user_input]
+                first_action = True
+        else:
+            if user_board[y_user_input][x_user_input]!='?' or user_board[y_user_input][x_user_input]!='L':
+                print("already taken")
+            elif placed_flags[y_user_input][x_user_input]==False:
+                user_board[y_user_input][x_user_input] = 'L'
+                placed_flags[y_user_input][x_user_input] = True
+                first_action = True
+            else:
+                user_board[y_user_input][x_user_input] = '?'
+                placed_flags[y_user_input][x_user_input] = False
+                first_action = True
+
+
+# user_board[y_user_input][x_user_input]
+# placed_flags[y_user_input][x_user_input]
+# pc_board[y_user_input][x_user_input]
+
+
+def main():
+    game_start()
 
 
 main()

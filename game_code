@@ -236,9 +236,6 @@ def game_start():
                             if i>=0 and i<y and j-1>=0 and j-1<x:
                                 user_board[i][j-1] = pc_board[i][j-1]
                             
-                            if i>=0 and i<y and j>=0 and j<x:
-                                user_board[i][j] = pc_board[i][j]
-                            
                             if i>=0 and i<y and j+1>=0 and j+1<x:
                                 user_board[i][j+1] = pc_board[i][j+1]
                             

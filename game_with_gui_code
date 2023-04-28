@@ -1,6 +1,5 @@
 import random
 import tkinter as tk
-import time
 
 MAX_BOARD = 25
 
@@ -11,6 +10,7 @@ mode = "bomb"
 y = 0
 x = 0
 bomb_chance = 0
+
 
 def create_board():
     global y, x
@@ -33,24 +33,18 @@ def print_board():
 
 def get_coordinates_and_chance():
     global y, x, bomb_chance
-    counter = 0
 
     while True:
-
-        if counter == 3:
-            return "stop"
-
         try:
-            y = int(input(f"please enter the row amount in range of 1 to {MAX_BOARD}: "))
-            x = int(input(f"please enter the column amount in range of 1 to {MAX_BOARD}: "))
+            y = int(input(f"please enter the row amount in range of 3 to {MAX_BOARD}: "))
+            x = int(input(f"please enter the column amount in range of 3 to {MAX_BOARD}: "))
             bomb_chance = int(input(f"please enter the chance for a bomb to appear in range of 2 to 20: "))
 
-            if y < 1 or y > MAX_BOARD or x < 1 or x > MAX_BOARD or bomb_chance < 2 or bomb_chance > 20:
+            if y < 3 or y > MAX_BOARD or x < 3 or x > MAX_BOARD or bomb_chance < 2 or bomb_chance > 20:
                 print("you did not enter the asked range for the coordinates or for the chance")
             else:
                 return y, x, bomb_chance
-        except:
-            counter += 1
+        except ValueError:
             print("please enter valid places and chance")
 
 
@@ -152,11 +146,7 @@ def main():
     global main_board, y, x, bomb_chance
     coordinates = get_coordinates_and_chance()
 
-    if coordinates != "stop":
-        y, x, bomb_chance = coordinates
-    else:
-        print("you have entered 3 times invalid coordinates, game will now end")
-        return "game_over"
+    y, x, bomb_chance = coordinates
 
     main_board = create_board()
 
@@ -280,6 +270,7 @@ did_action = False
 game_over = False
 zero_checker_bool = []
 
+
 for i in range(y):
     buttons.append([])
     zero_checker_bool.append([])
@@ -290,19 +281,19 @@ for i in range(y):
         zero_checker_bool[i].append(False)
 
 mode_button = tk.Button(text="bomb", command=change_mode, height=3, width=6)
-mode_button.grid(row=y + 1, column=j // 2)
+mode_button.grid(row=y + 1, column=x // 2)
 
 
 clear_board_button = tk.Button(text="clr brd", command=lambda: clear_board() ,width=6, height=3)
-clear_board_button.grid(row=y + 1, column=j // 2 + 1)
+clear_board_button.grid(row=y + 1, column=x // 2 + 1)
 
 
 print_board_button = tk.Button(text="print brd", command=lambda: print_board(), width=6, height=3)
-print_board_button.grid(row=y + 2, column=j // 2)
+print_board_button.grid(row=y + 2, column=x // 2)
 
 
 show_board_button = tk.Button(text="shw brd", command=lambda: show_board(), width=6, height=3)
-show_board_button.grid(row=y + 2, column=j // 2 + 1)
+show_board_button.grid(row=y + 2, column=x // 2 + 1)
 
 
 tk.mainloop()
